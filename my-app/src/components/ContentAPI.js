@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import css from './css/Content.module.css'
-import PostItem from './PostItem'
+import PostItemAPI from './PostItemAPI'
 import Loader from './Loader'
 import axios from 'axios'
-import API_KEY from 'secrets.js'
+import API_KEY from '../secrets'
 
 export class ContentAPI extends Component {
     constructor(props) {
@@ -18,16 +18,16 @@ export class ContentAPI extends Component {
     componentDidMount() {
         this.fetchImages();
     }
+    // Use this website as reference : https://pixabay.com/api/docs/ 
+    // Always put await axios.get.. before link.
     async fetchImages() {
-        // Use this website as reference : https://pixabay.com/api/docs/ 
-        // Always put await axios.get.. before link.
-        const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&per_page=100&safesearch=true&editors_choice=true&orientation=horizontal`)
+        const response = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&per_page=100&safesearch=true&editors_choice=true&orientation=horizontal`);
         const fetchedPosts = response.data.hits;
-        this.setState ({
-            isLoaded: true,
-            post: fetchedPosts,
-            savedPosts: fetchedPosts
 
+        this.setState({
+            isLoaded: true,
+            posts: fetchedPosts,
+            savedPosts: fetchedPosts,
         })
     }
     handleChange = (e) => {
@@ -35,6 +35,7 @@ export class ContentAPI extends Component {
         const filterPosts = this.state.savedPosts.filter((post)=>{
             return post.user.toLowerCase().includes(userInput);
         }) 
+        
         this.setState({
             posts: filterPosts
         })
@@ -58,7 +59,7 @@ export class ContentAPI extends Component {
                 <div className={css.SearchResults}>
                     {
                         this.state.isLoaded ? 
-                        <PostItem savedPosts={this.state.posts} />
+                        <PostItemAPI savedPosts={this.state.posts} />
                         : <Loader />
                     }
                 </div>

@@ -1,6 +1,5 @@
 import React from 'react'
 import css from './css/Content.module.css'
-import {savedPosts} from '../posts.json'
 
 function PostItemAPI(props) {
   return (
